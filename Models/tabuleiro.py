@@ -2,8 +2,6 @@ class tabuleiro():
     # Inicializa o tabuleiro com 15x15
     def __init__(self):
         self.tabuleiro = [["="] * 15 for _ in range(15)]
-        self.pos_0 = []
-        self.pos_x = []
 
     # Função para movimentar a peça no tabuleiro
     def movimentar_peca(self, x, y, peca):
