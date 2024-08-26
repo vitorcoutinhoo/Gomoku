@@ -10,12 +10,6 @@ class tabuleiro():
         if self.verificar_posicao(x, y):
             self.tabuleiro[y][x] = peca
 
-            # Adiciona a posição da peça no tabuleiro
-            if peca == "0":
-                self.pos_0.append([x, y])
-            else:
-                self.pos_x.append([x, y])
-
         else:
             print("Posição inválida")
     
