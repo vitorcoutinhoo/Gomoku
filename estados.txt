@@ -1,0 +1,13 @@
+CLIENT         |    SERVER
+
+pede cnxão          aceita cnxão
+                    sorteia um usuario para começar
+recebe msg de 
+inicio
+Faz a jogada        
+                    recebe a jogada
+                    verifica win
+                    passa o turno
+Faz a jogada        
+                    ...
+
