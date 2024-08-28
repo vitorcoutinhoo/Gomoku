@@ -1,7 +1,8 @@
 class tabuleiro():
     # Inicializa o tabuleiro com 15x15
     def __init__(self):
-        self.tabuleiro = [["="] * 15 for _ in range(15)]
+        self.tabuleiro = [["*"] * 15 for _ in range(15)]
+        self.lastpos = ()
 
     # Função para movimentar a peça no tabuleiro
     def movimentar_peca(self, x, y, peca):
@@ -9,6 +10,7 @@ class tabuleiro():
         # Verifica se a posição é válida
         if self.verificar_posicao(x, y):
             self.tabuleiro[y][x] = peca
+            self.lastpos = (x, y, peca)
 
         else:
             print("Posição inválida")
@@ -21,14 +23,16 @@ class tabuleiro():
             return False
         
         # Verifica se a posição está vazia
-        if self.tabuleiro[y][x] != "=":
+        if self.tabuleiro[y][x] != "*":
             return False
 
         return True
     
     # Função para verificar se alguém ganhou
     # olha em todas as direções possiveis
-    def verificar_ganhador(self, x, y, peca):
+    def verificar_ganhador(self):
+        x, y, peca = self.lastpos
+
         for dx, dy in [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (1, 1), (1, -1), (-1, -1)]:
             if self.checar_sequencia(x, y, dx, dy, peca):
                 return True
@@ -49,14 +53,3 @@ class tabuleiro():
     def mostrar_tabuleiro(self):
         return "\n".join([" ".join(row) for row in self.tabuleiro])
 
-
-x = tabuleiro()
-x.movimentar_peca(1, 7, "X")
-x.movimentar_peca(2, 8, "X")
-x.movimentar_peca(3, 9, "X")
-x.movimentar_peca(4, 10, "X")
-x.movimentar_peca(5, 11, "X")
-
-# verifica ganhador -> (last_x, last_y, peca)
-print(x.verificar_ganhador(5, 11, "X"))
-print(x.mostrar_tabuleiro())
