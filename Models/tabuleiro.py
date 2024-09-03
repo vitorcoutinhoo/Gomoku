@@ -1,5 +1,6 @@
-class tabuleiro():
-    # Inicializa o tabuleiro com 15x15
+class Tabuleiro():
+
+    # Inicializa o tabuleiro com 15x15 posições
     def __init__(self):
         self.tabuleiro = [["="] * 15 for _ in range(15)]
 
@@ -48,15 +49,4 @@ class tabuleiro():
     # Função para mostrar o tabuleiro
     def mostrar_tabuleiro(self):
         return "\n".join([" ".join(row) for row in self.tabuleiro])
-
-
-x = tabuleiro()
-x.movimentar_peca(1, 7, "X")
-x.movimentar_peca(2, 8, "X")
-x.movimentar_peca(3, 9, "X")
-x.movimentar_peca(4, 10, "X")
-x.movimentar_peca(5, 11, "X")
-
-# verifica ganhador -> (last_x, last_y, peca)
-print(x.verificar_ganhador(5, 11, "X"))
-print(x.mostrar_tabuleiro())
+    
