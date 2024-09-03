@@ -9,5 +9,6 @@ Gomoku é um jogo de tabuleiro (15 x 15), onde o objetivo do jogador é formar u
 
 #### Rodando os arquivos:
 Para rodar o servidor basta estar na pasta raiz e digitar no terminal
-```python server.py
-
+``` bash
+python server.py 
+```
