@@ -2,7 +2,8 @@ class Tabuleiro():
 
     # Inicializa o tabuleiro com 15x15 posições
     def __init__(self):
-        self.tabuleiro = [["="] * 15 for _ in range(15)]
+        self.tabuleiro = [["*"] * 15 for _ in range(15)]
+        self.lastpos = (0, 0, None)
 
     # Função para movimentar a peça no tabuleiro
     def movimentar_peca(self, x, y, peca):
@@ -10,9 +11,11 @@ class Tabuleiro():
         # Verifica se a posição é válida
         if self.verificar_posicao(x, y):
             self.tabuleiro[y][x] = peca
+            self.lastpos = (x, y, peca)
+            return True
 
         else:
-            print("Posição inválida")
+            return False
     
     # Função para verificar posição a ser movimentada
     def verificar_posicao(self, x, y):
@@ -22,14 +25,16 @@ class Tabuleiro():
             return False
         
         # Verifica se a posição está vazia
-        if self.tabuleiro[y][x] != "=":
+        if self.tabuleiro[y][x] != "*":
             return False
 
         return True
     
     # Função para verificar se alguém ganhou
     # olha em todas as direções possiveis
-    def verificar_ganhador(self, x, y, peca):
+    def verificar_ganhador(self):
+        x, y, peca = self.lastpos
+
         for dx, dy in [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (1, 1), (1, -1), (-1, -1)]:
             if self.checar_sequencia(x, y, dx, dy, peca):
                 return True
@@ -49,4 +54,3 @@ class Tabuleiro():
     # Função para mostrar o tabuleiro
     def mostrar_tabuleiro(self):
         return "\n".join([" ".join(row) for row in self.tabuleiro])
-    
