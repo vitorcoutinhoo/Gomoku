@@ -1,3 +1,5 @@
+# pylint: disable = C0103, C0114, C0115, C0116, W0603
+
 class Tabuleiro():
 
     # Inicializa o tabuleiro com 15x15 posições
@@ -16,20 +18,22 @@ class Tabuleiro():
 
         else:
             return False
-    
+
+
     # Função para verificar posição a ser movimentada
     def verificar_posicao(self, x, y):
 
         # Verifica se a posição está dentro do tabuleiro
         if x < 0 or x > 14 or y < 0 or y > 14:
             return False
-        
+
         # Verifica se a posição está vazia
         if self.tabuleiro[y][x] != "*":
             return False
 
         return True
-    
+
+
     # Função para verificar se alguém ganhou
     # olha em todas as direções possiveis
     def verificar_ganhador(self):
@@ -39,6 +43,7 @@ class Tabuleiro():
             if self.checar_sequencia(x, y, dx, dy, peca):
                 return True
         return False
+
 
     # Função para checar sequência de peças
     def checar_sequencia(self, x, y, dx, dy, peca):
@@ -50,6 +55,7 @@ class Tabuleiro():
             if nx < 0 or ny < 0 or nx >= 15 or ny >= 15 or self.tabuleiro[ny][nx] != peca:
                 return False
         return True
+
 
     # Função para mostrar o tabuleiro
     def mostrar_tabuleiro(self):

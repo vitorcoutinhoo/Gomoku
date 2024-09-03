@@ -52,16 +52,20 @@ def jogar(x, y, jogador):
         if jogador_atual != jogador:
             return "Não é sua vez"  # --> Se não for a vez do jogador, retorna "Não é sua vez"
 
+        # Mostra o tabuleiro atual, antes de realizar a jogada
+        tabuleiro.mostrar_tabuleiro()
+
         # Chama a função movimentar_peca do tabuleiro
         if tabuleiro.movimentar_peca(x, y, jogador):
             # Verifica se o jogador atual ganhou
             if tabuleiro.verificar_ganhador():
-                tabuleiro.mostrar_tabuleiro()
+                tabuleiro.mostrar_tabuleiro() # --> Mostra o tabuleiro ao final da partida
                 return f"Jogador {jogador} ganhou"
 
             # Troca o jogador atual
             jogador_atual = "O" if jogador == "X" else "X"
-            tabuleiro.mostrar_tabuleiro()
+            tabuleiro.mostrar_tabuleiro() # --> Mostra o tabuleiro ao final de cada jogada
+            
             return "Jogada realizada"  # --> Se a jogada for realizada, retorna "Jogada realizada"
 
         return "Posição inválida"  # --> Se a posição for inválida, retorna "Posição inválida"
