@@ -20,4 +20,4 @@ Para rodar o client abra um terminal novo na pasta raiz e digite
 ```bash
 python client.py
 ```
-<p style="font-size: 11px; font-style: italic"> Obs: Cada jogador deve ser aberto em um terminal diferente!</p>
+Obs: Cada jogador deve ser aberto em um terminal diferente!
