@@ -12,7 +12,7 @@ class Tabuleiro():
 
         # Verifica se a posição é válida
         if self.verificar_posicao(x, y):
-            self.tabuleiro[y][x] = peca
+            self.tabuleiro[x][y] = peca
             self.lastpos = (x, y, peca)
             return True
 
