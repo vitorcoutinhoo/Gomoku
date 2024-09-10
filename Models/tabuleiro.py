@@ -16,8 +16,8 @@ class Tabuleiro():
             self.lastpos = (x, y, peca)
             return True
 
-        else:
-            return False
+        # Se a posição não for válida, retorna falso
+        return False
 
 
     # Função para verificar posição a ser movimentada
@@ -27,7 +27,7 @@ class Tabuleiro():
         if x < 0 or x > 14 or y < 0 or y > 14:
             return False
 
-        # Verifica se a posição está vazia
+        # Verifica se a posição não está vazia
         if self.tabuleiro[y][x] != "*":
             return False
 
@@ -35,13 +35,15 @@ class Tabuleiro():
 
 
     # Função para verificar se alguém ganhou
-    # olha em todas as direções possiveis
     def verificar_ganhador(self):
         x, y, peca = self.lastpos
 
+        # Verifica se existe uma sequência de 5 peças iguais em todas as direções possiveis
         for dx, dy in [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (1, 1), (1, -1), (-1, -1)]:
             if self.checar_sequencia(x, y, dx, dy, peca):
                 return True
+        
+        # Se não existir, retorna False
         return False
 
 
@@ -51,7 +53,7 @@ class Tabuleiro():
             # nx e ny são as posições a serem verificadas
             nx, ny = x + k * dx, y + k * dy
 
-            # se a posição não for válida ou a peça for diferente, retorna falso
+            # Se a posição não for válida ou a peça for diferente, retorna falso
             if nx < 0 or ny < 0 or nx >= 15 or ny >= 15 or self.tabuleiro[ny][nx] != peca:
                 return False
         return True
