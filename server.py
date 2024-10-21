@@ -2,86 +2,58 @@
 
 # Importa as bibliotecas necessárias para o servidor
 from xmlrpc.server import SimpleXMLRPCServer
-import threading  # --> Utilizado para evitar que os dois jogadores joguem ao mesmo tempo
 
-from Models.tabuleiro import Tabuleiro  # --> Importa a classe Tabuleiro
+# Importa os metodos da classe Room
+from Models.room import Room
 
-# Inicializa a classe Tabuleiro
-tabuleiro = Tabuleiro()
+# Guarda as salas ativas
+salas_ativas = {}
 
-# Define o jogador atual como X
-jogador_atual = "X"
+# função para criar a sala
+def criar_sala():
+    sala_id = Room.criar_sala()
+    salas_ativas[sala_id] = Room.obter_sala(sala_id)
+    return sala_id
 
-# Jogadores, inicialmente vazios
-jogador1 = None
-jogador2 = None
+# função para obter a sala
+def obter_jogador_atual(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala :
+        return "Sala não encontrada"
+    return sala.jogador_atual
 
-# Trava para evitar que dois jogadores joguem ao mesmo tempo
-lock = threading.Lock()
+# função para registrar o jogador
+def registrar_jogador(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+    return sala.conectar_sala(sala_id)
 
+# função para jogar
+def jogar(sala_id, x, y, jogador):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+    return sala.jogar(x, y, jogador)
 
-# Função RPC para registrar jogador
-def registrar_jogador():
-    # Importa as variáveis globais para serem modificadas
-    global jogador1, jogador2
-
-    # A partir do momento que a função é chamada, a trava é ativada
-    with lock:
-        # Verifica se o jogador 1 está vazio, se sim, o jogador 1 é registrado como X
-        if not jogador1:
-            jogador1 = threading.current_thread().name
-            return "X"
-
-        # Verifica se o jogador 2 está vazio, se sim, o jogador 2 é registrado como O
-        if not jogador2:
-            jogador2 = threading.current_thread().name
-            return "O"
-
-        # Se ambos os jogadores já estiverem registrados, retorna None
-        return None
-
-
-# Função RPC para jogar
-def jogar(x, y, jogador):
-    # Importa as variáveis globais para serem modificadas
-    global jogador_atual
-
-    # A partir do momento que a função é chamada, a trava é ativada
-    with lock:
-        # Verifica se o jogador atual é o mesmo que o jogador que está tentando jogar
-        if jogador_atual != jogador:
-            return "Não é sua vez"  # --> Se não for a vez do jogador, retorna "Não é sua vez"
-
-        # Chama a função movimentar_peca do tabuleiro
-        if tabuleiro.movimentar_peca(x, y, jogador):
-            # Verifica se o jogador atual ganhou
-            if tabuleiro.verificar_ganhador():
-                return f"Jogador {jogador} ganhou"
-
-            # Troca o jogador atual
-            jogador_atual = "O" if jogador == "X" else "X"
-            return "Jogada realizada"  # --> Se a jogada for realizada, retorna "Jogada realizada"
-
-        return "Posição inválida"  # --> Se a posição for inválida, retorna "Posição inválida"
+# função para mostrar o tabuleiro
+def mostrar_tabuleiro(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+    return sala.mostrar_tabuleiro(sala_id)
 
 
-def player_atual():
-    return jogador_atual
-
-
-def mostrar_tabuleiro():
-    return tabuleiro.mostrar_tabuleiro()
-
-
-# Inicia o servidor RPC
-servidor = SimpleXMLRPCServer(("localhost", 8000))
+# Cria o servidor
+server = SimpleXMLRPCServer(("localhost", 8000))
 print("Servidor iniciado na porta 8000")
 
-# Registra as funções RPC
-servidor.register_function(registrar_jogador, "registrar_jogador")
-servidor.register_function(jogar, "jogar")
-servidor.register_function(player_atual, "player_atual")
-servidor.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
+# Registra as funções no servidor
+server.register_function(criar_sala, "criar_sala")
+server.register_function(registrar_jogador, "registrar_jogador")
+server.register_function(obter_jogador_atual, "obter_jogador_atual")
+server.register_function(jogar, "jogar")
+server.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
 
 # Inicia o servidor
-servidor.serve_forever()
+server.serve_forever()
