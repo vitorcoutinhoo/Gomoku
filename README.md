@@ -1,32 +1,14 @@
-## Gomoku - Projeto de Sistemas Distribuídos
+# Gomoku 
 
-**Gomoku** é um jogo de tabuleiro (15 x 15), onde dois jogadores competem entre si. Para atingir a vitória um dos jogadores deve completar **5 peças em sequência**.
+<p align="justify">
+    <strong>Gomoku</strong> é um jogo de tabuleiro no estilo "cinco em linha" jogado em uma grade 15x15, onde dois jogadores competem para alinhar cinco peças consecutivas em linha reta, seja horizontal, vertical ou diagonal.<br><br>
+    Este projeto implementa uma versão distribuída do jogo utilizando chamadas remotas de procedimento (RPC), permitindo que os jogadores se conectem e interajam em diferentes salas de jogo.
+</p>
 
-O objetivo do projeto é implementar uma versão do jogo com **métodos de chamadas remotas (RPC)**.
+### Funcionalidades
 
-#### Arquivos
-- Pasta Models: Possui a classe **Tabuleiro**. Essa sendo responsável pelos métodos para criar um tabuleiro, mover as peças e verificar se algum jogador ganhou.
-
-- _server.py_: Arquivo onde está a configuração do servidor, e seus eventuais métodos RPC. Responsável pela **parte lógica** do jogo e por manter o estado atual do jogo.
-
-- _client.py_: Arquivo onde está a comunicação entre cliente e servidor. Responsável por **enviar a jogada** ao servidor e receber a resposta.
-
-#### Bibliotecas Necessárias
-- _xmlrpc.server_: Importa a função SimpleXMLRPCServer, utilizada na criação do servidor RPC.
-  
-- _xmlrpc.client_: Utiliza a função ServerProxy, responsável pela conexão do usuário ao servidor.
-  
-- _threading_: Utiliza a função Lock, evita concorrência entre os usuários permitindo controlar os turnos das jogadas.
-  
-- _sys_: Utiliza a função Exit, finaliza a execução do programa.
-
-#### Rodando os arquivos:
-Para rodar o servidor basta estar na pasta raiz e digitar no terminal
-``` bash
-python server.py 
-```
-Para rodar o client abra um terminal novo na pasta raiz e digite
-```bash
-python client.py
-```
-Obs: Cada jogador deve ser aberto em um terminal diferente!
+<lo align="justify">
+    <li>Salas de Jogo (Rooms): Cada partida ocorre em uma sala única, identificada por um código de sala, onde os jogadores se conectam e competem entre si.</li><br>
+    <li>Servidor RPC: Disponibiliza funções específicas das classes para o cliente, permitindo que ele chame diretamente métodos do servidor para manipular e obter informações sobre o jogo. Além de manter o estado das rooms.</li><br>
+    <li>Cliente RPC: Permite aos jogadores realizar jogadas e receber atualizações do servidor em tempo real.</li>
+</lo>
