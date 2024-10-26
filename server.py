@@ -6,11 +6,15 @@ from xmlrpc.server import SimpleXMLRPCServer
 # Importa os metodos da classe Room
 from Models.room import Room
 
-# Guarda as salas ativas
+# Guarda as salas ativas e o número máximo de salas
 salas_ativas = {}
+max_salas = 5
 
 # função para criar a sala
 def criar_sala():
+    if len(salas_ativas) >= max_salas:
+        return "Número máximo de salas atingido"
+    
     sala_id = Room.criar_sala()
     salas_ativas[sala_id] = Room.obter_sala(sala_id)
     return sala_id

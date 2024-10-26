@@ -69,6 +69,14 @@ if option == "3":
 if option == "1":
     clear_screen()
     sala_id = proxy.criar_sala()
+
+    # Encerra caso já tenha atingido o numero máximo de salas
+    if not sala_id.isdigit():
+        clear_screen()
+        print(sala_id)
+        time.sleep(2)
+        sys.exit()
+
     print(f"Sala criada com ID: {sala_id}")
 
     jogador = proxy.registrar_jogador(sala_id)
