@@ -1,8 +1,10 @@
 # pylint: disable = C0103, C0114, C0115, C0116, W0603
 
-class Tabuleiro():
+
+class Tabuleiro:
 
     # Inicializa o tabuleiro com 15x15 posições
+    # Inicializa a última posição jogada como (x = 0, y = 0, peca = None)
     def __init__(self):
         self.tabuleiro = [["*"] * 15 for _ in range(15)]
         self.lastpos = (0, 0, None)
@@ -19,7 +21,6 @@ class Tabuleiro():
         # Se a posição não for válida, retorna falso
         return False
 
-
     # Função para verificar posição a ser movimentada
     def verificar_posicao(self, x, y):
 
@@ -33,31 +34,32 @@ class Tabuleiro():
 
         return True
 
-
     # Função para verificar se alguém ganhou
     def verificar_ganhador(self):
         x, y, peca = self.lastpos
 
         # Verifica se existe uma sequência de 5 peças iguais em todas as direções possiveis
-        for dx, dy in [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (1, 1), (1, -1), (-1, -1)]:
-            if self.checar_sequencia(x, y, dx, dy, peca):
+        for dx, dy in [(1, 0), (0, 1), (1, 1), (1, -1)]:
+            if self.checar_sequencia(x, y, dx, dy, peca) or \
+                self.checar_sequencia(x, y, -dx, -dy, peca):
                 return True
-        
+
         # Se não existir, retorna False
         return False
-
 
     # Função para checar sequência de peças
     def checar_sequencia(self, x, y, dx, dy, peca):
         for k in range(5):
             # nx e ny são as posições a serem verificadas
-            nx, ny = x + k * dx, y + k * dy
+            Px, Py = x + k * dx, y + k * dy
 
             # Se a posição não for válida ou a peça for diferente, retorna falso
-            if nx < 0 or ny < 0 or nx >= 15 or ny >= 15 or self.tabuleiro[ny][nx] != peca:
+            if (Px < 0 or Py < 0 \
+                or Px >= 15 or Py >= 15 \
+                or self.tabuleiro[Px][Py] != peca):
                 return False
+            
         return True
-
 
     # Função para mostrar o tabuleiro
     def mostrar_tabuleiro(self):

@@ -35,7 +35,7 @@ class Room:
             if sala.jogador2 is None:
                 sala.jogador2 = "O"
                 return sala.jogador2
-            
+
             return "Sala cheia"
 
     def jogar(self, x, y, jogador):

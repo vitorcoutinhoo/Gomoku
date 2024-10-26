@@ -45,6 +45,7 @@ def execute(sala_id, jogador):
             time.sleep(2)
 
             if "ganhou" in res:
+                print("\nTabuleiro final:")
                 print(proxy.mostrar_tabuleiro(sala_id))
                 break
         else:
