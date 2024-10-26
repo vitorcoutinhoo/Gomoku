@@ -28,7 +28,7 @@ class Tabuleiro():
             return False
 
         # Verifica se a posição não está vazia
-        if self.tabuleiro[y][x] != "*":
+        if self.tabuleiro[x][y] != "*":
             return False
 
         return True
