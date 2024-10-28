@@ -5,10 +5,40 @@
     Este projeto implementa uma versão distribuída do jogo utilizando chamadas remotas de procedimento (RPC), permitindo que os jogadores se conectem e interajam em diferentes salas de jogo.
 </p>
 
-## Funcionalidades
+## Como Jogar?
 
 <p align="justify">
-    <strong>Salas de Jogo (Rooms)</strong>: Cada partida ocorre em uma sala única, identificada por um código de sala, onde os jogadores se conectam e competem entre si.<br><br>
-    <strong>Servidor RPC</strong>: Disponibiliza funções específicas das classes para o cliente, permitindo que ele chame diretamente métodos do servidor para manipular e obter informações sobre o jogo. Além de manter o estado das rooms.<br><br>
-    <strong>Cliente RPC</strong>: Permite aos jogadores realizar jogadas e receber atualizações do servidor em tempo real.
+    Para jogar, você precisará de pelo menos três terminais abertos: um para o servidor e dois para os jogadores.
 </p>
+
+### Configuração do Ambiente
+
+<p align="justify">
+Certifique-se de ter o Python 3.12 instalado. Os módulos utilizados fazem parte da biblioteca padrão do Python. Portanto não é necessário instalar módulos externos
+</p>
+
+### Rodando o Jogo
+
+#### No Windows
+
+Inicie o servidor:
+```bash
+python server.py
+```
+Em terminais separados, inicie os clientes:
+```bash
+python client.py
+```
+### Regras
+<p align="justify">
+    - O objetivo é alinhar cinco peças consecutivas em uma linha reta (horizontal, vertical ou diagonal).<br><br>
+    - Dois jogadores se alternam para colocar suas peças na grade 15x15 até que um deles consiga alinhar cinco peças seguidas.
+    <br><br>
+    - Para fazer a jogada digite no seguinte formato:
+</p>
+
+```bash
+linha, coluna
+```
+
+
