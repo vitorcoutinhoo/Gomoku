@@ -1,39 +1,68 @@
-# pylint: disable = C0103, C0114, C0116, W0603
+# pylint: disable = C0103, C0114, C0116, C0410, W0603, W0621
 
 # Importa as bibliotecas necessárias para o cliente
-import sys
+import sys, time
 import xmlrpc.client
+import game
 
-# Cria o proxy para conectar ao servidor
+
+# Cria conexão com o servidor, na porta 8000 do localhost
 proxy = xmlrpc.client.ServerProxy("http://localhost:8000/")
 
-# Registra o jogador
-jogador = proxy.registrar_jogador()
+# Mostra o menu e obtem a opção escolhida pelo jogador
+option = game.menu()
 
-if not jogador:
-    print("Jogo cheio")
+# Encerra o programa caso a opção seja 3
+if option == "3":
+    game.clean_screen()
+    print("Obrigado por jogar Gomoku!")
     sys.exit()
 
-print(f"Você é o jogador {jogador}!")
+# Cria uma nova sala caso a opção seja 1
+if option == "1":
+    game.clean_screen()
+    sala_id = proxy.criar_sala()
 
-# Loop principal do jogo
-while True:
-    if proxy.player_atual() == jogador: # --> Verifica se é a vez do jogador
-        
-        # Mostra o tabuleiro
-        print(proxy.mostrar_tabuleiro())
+    # encerra caso já tenha atingido o numero máximo de salas
+    if not sala_id.isdigit():
+        game.clean_screen()
+        print(sala_id)
+        time.sleep(2)
+        sys.exit()
 
-        # Pede a linha e a coluna para o jogador
-        x = int(input("Digite a linha (0 - 14): "))
-        y = int(input("Digite a coluna (0 - 14): "))
+    print(f"Sala criada com ID: {sala_id}")
 
-        # Chama a função jogar do servidor
-        resultado = proxy.jogar(x, y, jogador)
-        print(resultado)
+    # registra o jogador na sala
+    jogador = proxy.registrar_jogador(sala_id)
+    print(f"Você é o jogador {jogador}")
+    time.sleep(2)
 
-        # Encerra o jogo se o jogador ganhou
-        if "ganhou" in resultado:
-            print(proxy.mostrar_tabuleiro()) # --> Mostra o tabuleiro final
-            break
-    else:
-        print("Aguardando o Oponente")
+    # executa o jogo
+    game.execute(sala_id, jogador, proxy)
+
+
+# Entra em uma sala já existente caso a opção seja 2
+if option == "2":
+    game.clean_screen()
+    sala_id = input("Digite o ID da sala: ")
+
+    # registra o jogador na sala
+    jogador = proxy.registrar_jogador(sala_id)
+
+    # encerra o programa caso a sala não exista
+    if jogador == "Sala não encontrada":
+        print("Sala não encontrada, tente novamente")
+        time.sleep(2)
+        sys.exit()
+
+    # encerra o programa caso a sala esteja cheia
+    if jogador == "Sala cheia":
+        print("Sala cheia, tente outra sala")
+        time.sleep(2)
+        sys.exit()
+
+    print(f"Você é o jogador {jogador}")
+    time.sleep(2)
+
+    # executa o jogo
+    game.execute(sala_id, jogador, proxy)

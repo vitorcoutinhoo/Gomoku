@@ -1,87 +1,107 @@
 # pylint: disable = C0103, C0114, C0116, W0603
 
+
 # Importa as bibliotecas necessárias para o servidor
 from xmlrpc.server import SimpleXMLRPCServer
-import threading  # --> Utilizado para evitar que os dois jogadores joguem ao mesmo tempo
-
-from Models.tabuleiro import Tabuleiro  # --> Importa a classe Tabuleiro
-
-# Inicializa a classe Tabuleiro
-tabuleiro = Tabuleiro()
-
-# Define o jogador atual como X
-jogador_atual = "X"
-
-# Jogadores, inicialmente vazios
-jogador1 = None
-jogador2 = None
-
-# Trava para evitar que dois jogadores joguem ao mesmo tempo
-lock = threading.Lock()
 
 
-# Função RPC para registrar jogador
-def registrar_jogador():
-    # Importa as variáveis globais para serem modificadas
-    global jogador1, jogador2
-
-    # A partir do momento que a função é chamada, a trava é ativada
-    with lock:
-        # Verifica se o jogador 1 está vazio, se sim, o jogador 1 é registrado como X
-        if not jogador1:
-            jogador1 = threading.current_thread().name
-            return "X"
-
-        # Verifica se o jogador 2 está vazio, se sim, o jogador 2 é registrado como O
-        if not jogador2:
-            jogador2 = threading.current_thread().name
-            return "O"
-
-        # Se ambos os jogadores já estiverem registrados, retorna None
-        return None
+# Importa os metodos da classe Room
+from Models.room import Room
 
 
-# Função RPC para jogar
-def jogar(x, y, jogador):
-    # Importa as variáveis globais para serem modificadas
-    global jogador_atual
-
-    # A partir do momento que a função é chamada, a trava é ativada
-    with lock:
-        # Verifica se o jogador atual é o mesmo que o jogador que está tentando jogar
-        if jogador_atual != jogador:
-            return "Não é sua vez"  # --> Se não for a vez do jogador, retorna "Não é sua vez"
-
-        # Chama a função movimentar_peca do tabuleiro
-        if tabuleiro.movimentar_peca(x, y, jogador):
-            # Verifica se o jogador atual ganhou
-            if tabuleiro.verificar_ganhador():
-                return f"Jogador {jogador} ganhou"
-
-            # Troca o jogador atual
-            jogador_atual = "O" if jogador == "X" else "X"
-            return "Jogada realizada"  # --> Se a jogada for realizada, retorna "Jogada realizada"
-
-        return "Posição inválida"  # --> Se a posição for inválida, retorna "Posição inválida"
+# Guarda as salas ativas e o número máximo de salas
+salas_ativas = {}
+max_salas = 3
 
 
-def player_atual():
-    return jogador_atual
+# Função para criar a sala
+def criar_sala():
+    # impede que o número de salas ativas ultrapasse o máximo
+    if len(salas_ativas) >= max_salas:
+        return "Número máximo de salas atingido"
+
+    # cria a sala e a adiciona na lista de salas ativas
+    sala_id = Room.criar_sala()
+    salas_ativas[sala_id] = Room.obter_sala(sala_id)
+
+    # retorna o id da sala
+    return sala_id
 
 
-def mostrar_tabuleiro():
-    return tabuleiro.mostrar_tabuleiro()
+# Função para obter a sala
+def obter_jogador_atual(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # retorna o jogador atual, caso a sala exista
+    return sala.jogador_atual
 
 
-# Inicia o servidor RPC
-servidor = SimpleXMLRPCServer(("localhost", 8000))
+# função para obter o ganhador
+def obter_ganhador(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # retorna o ganhador, caso a sala exista
+    return sala.winner
+
+
+# função para registrar o jogador
+def registrar_jogador(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # conecta o jogador à sala, caso a sala exista
+    return sala.conectar_sala(sala_id)
+
+
+# função para jogar
+def jogar(sala_id, x, y, jogador):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # realiza a jogada, caso a sala exista
+    return sala.jogar(x, y, jogador)
+
+
+# função para finalizar a sala
+def finalizar_sala(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # finaliza a sala e retira ela das salas ativas, caso a sala exista
+    Room.finalizar_sala(sala_id)
+    salas_ativas.pop(sala_id)
+    return "Sala finalizada"
+
+
+# função para mostrar o tabuleiro
+def mostrar_tabuleiro(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # retorna o tabuleiro, caso a sala exista
+    return sala.mostrar_tabuleiro(sala_id)
+
+
+# Cria o servidor
+server = SimpleXMLRPCServer(("localhost", 8000))
 print("Servidor iniciado na porta 8000")
 
-# Registra as funções RPC
-servidor.register_function(registrar_jogador, "registrar_jogador")
-servidor.register_function(jogar, "jogar")
-servidor.register_function(player_atual, "player_atual")
-servidor.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
+# Registra as funções do servidor a serem disponibilizadas para o cliente
+server.register_function(criar_sala, "criar_sala")
+server.register_function(registrar_jogador, "registrar_jogador")
+server.register_function(obter_jogador_atual, "obter_jogador_atual")
+server.register_function(obter_ganhador, "obter_ganhador")
+server.register_function(jogar, "jogar")
+server.register_function(finalizar_sala, "finalizar_sala")
+server.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
 
 # Inicia o servidor
-servidor.serve_forever()
+server.serve_forever()

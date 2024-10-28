@@ -1,32 +1,44 @@
-## Gomoku - Projeto de Sistemas Distribuídos
+# Gomoku 
 
-**Gomoku** é um jogo de tabuleiro (15 x 15), onde dois jogadores competem entre si. Para atingir a vitória um dos jogadores deve completar **5 peças em sequência**.
+<p align="justify">
+    <strong>Gomoku</strong> é um jogo de tabuleiro no estilo "cinco em linha" jogado em uma grade 15x15, onde dois jogadores competem para alinhar cinco peças consecutivas em linha reta, seja horizontal, vertical ou diagonal.<br><br>
+    Este projeto implementa uma versão distribuída do jogo utilizando chamadas remotas de procedimento (RPC), permitindo que os jogadores se conectem e interajam em diferentes salas de jogo.
+</p>
 
-O objetivo do projeto é implementar uma versão do jogo com **métodos de chamadas remotas (RPC)**.
+## Como Jogar?
 
-#### Arquivos
-- Pasta Models: Possui a classe **Tabuleiro**. Essa sendo responsável pelos métodos para criar um tabuleiro, mover as peças e verificar se algum jogador ganhou.
+<p align="justify">
+    Para jogar, você precisará de pelo menos três terminais abertos: um para o servidor e dois para os jogadores.
+</p>
 
-- _server.py_: Arquivo onde está a configuração do servidor, e seus eventuais métodos RPC. Responsável pela **parte lógica** do jogo e por manter o estado atual do jogo.
+### Configuração do Ambiente
 
-- _client.py_: Arquivo onde está a comunicação entre cliente e servidor. Responsável por **enviar a jogada** ao servidor e receber a resposta.
+<p align="justify">
+Certifique-se de ter o Python 3.12 instalado. Os módulos utilizados fazem parte da biblioteca padrão do Python. Portanto não é necessário instalar módulos externos
+</p>
 
-#### Bibliotecas Necessárias
-- _xmlrpc.server_: Importa a função SimpleXMLRPCServer, utilizada na criação do servidor RPC.
-  
-- _xmlrpc.client_: Utiliza a função ServerProxy, responsável pela conexão do usuário ao servidor.
-  
-- _threading_: Utiliza a função Lock, evita concorrência entre os usuários permitindo controlar os turnos das jogadas.
-  
-- _sys_: Utiliza a função Exit, finaliza a execução do programa.
+### Rodando o Jogo
 
-#### Rodando os arquivos:
-Para rodar o servidor basta estar na pasta raiz e digitar no terminal
-``` bash
-python server.py 
+#### No Windows
+
+Inicie o servidor:
+```bash
+python server.py
 ```
-Para rodar o client abra um terminal novo na pasta raiz e digite
+Em terminais separados, inicie os clientes:
 ```bash
 python client.py
 ```
-Obs: Cada jogador deve ser aberto em um terminal diferente!
+### Regras
+<p align="justify">
+    - O objetivo é alinhar cinco peças consecutivas em uma linha reta (horizontal, vertical ou diagonal).<br><br>
+    - Dois jogadores se alternam para colocar suas peças na grade 15x15 até que um deles consiga alinhar cinco peças seguidas.
+    <br><br>
+    - Para fazer a jogada digite no seguinte formato:
+</p>
+
+```bash
+linha, coluna
+```
+
+
