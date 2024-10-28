@@ -1,4 +1,4 @@
-# pylint: disable = C0103, C0114, C0115, C0116, W0603
+# pylint: disable = C0103, C0114, C0115, C0116, C0301, W0603
 
 
 class Tabuleiro:
@@ -6,7 +6,6 @@ class Tabuleiro:
     # Inicializa o tabuleiro com 15x15 posições e valores iniciais da ultima posição jogada
     def __init__(self):
         self.tabuleiro = [["*" for _ in range(15)] for _ in range(15)]
-        self.tabuleiro[0][:4] = ["X", "X", "X", "X"]
         self.lastpos = (0, 0, None)
 
     # Função para movimentar a peça no tabuleiro
@@ -42,9 +41,7 @@ class Tabuleiro:
 
         # verifica se existe uma sequência de 5 peças iguais em todas as direções possiveis
         for dx, dy in [(1, 0), (0, 1), (1, 1), (1, -1)]:
-            if self.checar_sequencia(x, y, dx, dy, peca) or self.checar_sequencia(
-                x, y, -dx, -dy, peca
-            ):
+            if self.checar_sequencia(x, y, dx, dy, peca) or self.checar_sequencia(x, y, -dx, -dy, peca):
                 return True
 
         # se não existir, retorna False
