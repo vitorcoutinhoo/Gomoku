@@ -28,28 +28,41 @@ def execute(sala_id, jogador, proxy):
     while True:
         # obtem o jogador atual
         jogador_atual = proxy.obter_jogador_atual(sala_id)
-
+        
         # se for a vez do jogador, ele faz a sua jogada
         if jogador_atual == jogador:
             wait = False
+            status = proxy.obter_status(sala_id)
 
             # mostra o tabuleiro atual para o jogador fazer a sua jogada
             clean_screen()
             print(f"Sua vez de jogar, jogador {jogador}!")
-            print("Sala: " + sala_id + "\n")
+            print("ID: " + sala_id + "\n")
+
+            # espera o outro jogador entrar na sala para começar o jogo
+            while status == "Aguardando Jogadores":
+                print("Aguarde o outro jogador entrar na sala!")
+                print("\033[F\033[K", end="") # apaga a linha anterior
+
+                status = proxy.obter_status(sala_id)
+                
+
+            # mostra o tabuleiro atual
+            print("Tabuleiro atual:\n")
+            time.sleep(1)
             print(proxy.mostrar_tabuleiro(sala_id))
 
             # pede a posição para jogar, e efetua a jogada
             x, y = [
                 (int(coord.strip()) - 1)
-                for coord in input("\nDigite a posição (x, y) para jogar: ").split(",")
+                for coord in input("\nDigite a posição para jogar: ").split(",")
             ]
             res = proxy.jogar(sala_id, x, y, jogador)
 
             # mostra a mensagem após a jogada, se foi válida, inválida ou se o jogador ganhou
             clean_screen()
             print(res)
-            time.sleep(2)
+            time.sleep(1)
 
             # se o jogador ganhou, mostra o tabuleiro final
             if "ganhou" in res:
@@ -64,7 +77,7 @@ def execute(sala_id, jogador, proxy):
             if proxy.obter_ganhador(sala_id) != "":
                 clean_screen()
                 print(f"Jogador {proxy.obter_ganhador(sala_id)} ganhou!")
-                print("\nTabuleiro final:")
+                print("\nTabuleiro final:\n")
 
                 # se ganhou mostra a mensagem, o tabuleiro final e finaliza a sala
                 print(proxy.mostrar_tabuleiro(sala_id))
@@ -76,6 +89,6 @@ def execute(sala_id, jogador, proxy):
                 clean_screen()
                 print("Aguarde o outro jogador realizar a jogada!\n")
 
-                print("\nTabuleiro atual:")
+                print("\nTabuleiro atual:\n")
                 print(proxy.mostrar_tabuleiro(sala_id))
                 wait = True

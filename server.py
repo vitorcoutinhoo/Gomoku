@@ -15,17 +15,37 @@ max_salas = 3
 
 
 # Função para criar a sala
-def criar_sala():
+def criar_sala(nome):
     # impede que o número de salas ativas ultrapasse o máximo
     if len(salas_ativas) >= max_salas:
         return "Número máximo de salas atingido"
 
     # cria a sala e a adiciona na lista de salas ativas
-    sala_id = Room.criar_sala()
+    sala_id = Room().criar_sala(nome)
     salas_ativas[sala_id] = Room.obter_sala(sala_id)
 
     # retorna o id da sala
     return sala_id
+
+
+# Função para listar as salas
+def listar_salas():
+    salas = "Salas ativas:\n\n"
+    for sala_id, sala in salas_ativas.items():
+        salas += f"ID: {sala_id}, Nome: {sala.nome}, Status: {sala.status}\n"
+
+    # retorna uma lista com as salas ativas
+    return salas
+
+
+# Função para obter o status da sala
+def obter_status(sala_id):
+    sala = salas_ativas.get(sala_id)
+    if not sala:
+        return "Sala não encontrada"
+
+    # retorna o status da sala, caso a sala exista
+    return sala.status
 
 
 # Função para obter a sala
@@ -38,7 +58,7 @@ def obter_jogador_atual(sala_id):
     return sala.jogador_atual
 
 
-# função para obter o ganhador
+# Função para obter o ganhador
 def obter_ganhador(sala_id):
     sala = salas_ativas.get(sala_id)
     if not sala:
@@ -48,7 +68,7 @@ def obter_ganhador(sala_id):
     return sala.winner
 
 
-# função para registrar o jogador
+# Função para registrar o jogador
 def registrar_jogador(sala_id):
     sala = salas_ativas.get(sala_id)
     if not sala:
@@ -58,7 +78,7 @@ def registrar_jogador(sala_id):
     return sala.conectar_sala(sala_id)
 
 
-# função para jogar
+# Função para jogar
 def jogar(sala_id, x, y, jogador):
     sala = salas_ativas.get(sala_id)
     if not sala:
@@ -68,7 +88,7 @@ def jogar(sala_id, x, y, jogador):
     return sala.jogar(x, y, jogador)
 
 
-# função para finalizar a sala
+# Função para finalizar a sala
 def finalizar_sala(sala_id):
     sala = salas_ativas.get(sala_id)
     if not sala:
@@ -80,7 +100,7 @@ def finalizar_sala(sala_id):
     return "Sala finalizada"
 
 
-# função para mostrar o tabuleiro
+# Função para mostrar o tabuleiro
 def mostrar_tabuleiro(sala_id):
     sala = salas_ativas.get(sala_id)
     if not sala:
@@ -96,12 +116,15 @@ print("Servidor iniciado na porta 8000")
 
 # Registra as funções do servidor a serem disponibilizadas para o cliente
 server.register_function(criar_sala, "criar_sala")
+server.register_function(listar_salas, "listar_salas")
+server.register_function(obter_status, "obter_status")
+server.register_function(finalizar_sala, "finalizar_sala")
+server.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
+
 server.register_function(registrar_jogador, "registrar_jogador")
 server.register_function(obter_jogador_atual, "obter_jogador_atual")
 server.register_function(obter_ganhador, "obter_ganhador")
 server.register_function(jogar, "jogar")
-server.register_function(finalizar_sala, "finalizar_sala")
-server.register_function(mostrar_tabuleiro, "mostrar_tabuleiro")
 
 # Inicia o servidor
 server.serve_forever()
