@@ -12,6 +12,8 @@ class Room:
 
     # Inicializa a sala com um tabuleiro e os jogadores
     def __init__(self):
+        self.nome = ""
+        self.status = "Aguardando Jogadores"
         self.tabuleiro = Tabuleiro()
         self.jogador1 = None
         self.jogador2 = None
@@ -20,10 +22,11 @@ class Room:
         self.lock = threading.Lock()
 
     # Função para criar a sala
-    @classmethod
-    def criar_sala(cls):
-        sala_id = str(len(cls.salas) + 1)
-        cls.salas[sala_id] = Room()
+    def criar_sala(self, nome):
+        sala_id = str(len(self.salas) + 1)
+
+        self.salas[sala_id] = Room()
+        self.salas[sala_id].nome = nome
         return sala_id
 
     # Função para finalizar a sala
@@ -52,6 +55,7 @@ class Room:
             # verifica se já existe o jogador O na sala
             if sala.jogador2 is None:
                 sala.jogador2 = "O"
+                sala.status = "Em Andamento"
                 return sala.jogador2
 
             # se a sala estiver cheia, retorna a mensagem

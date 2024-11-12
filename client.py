@@ -21,21 +21,23 @@ if option == "3":
 # Cria uma nova sala caso a opção seja 1
 if option == "1":
     game.clean_screen()
-    sala_id = proxy.criar_sala()
+
+    nome = input("Digite o nome da sala: ")
+    sala_id = proxy.criar_sala(nome)
 
     # encerra caso já tenha atingido o numero máximo de salas
     if not sala_id.isdigit():
         game.clean_screen()
         print(sala_id)
-        time.sleep(2)
+        time.sleep(1)
         sys.exit()
 
-    print(f"Sala criada com ID: {sala_id}")
+    print(f"\nSala {nome} criada com ID: {sala_id}")
 
     # registra o jogador na sala
     jogador = proxy.registrar_jogador(sala_id)
     print(f"Você é o jogador {jogador}")
-    time.sleep(2)
+    time.sleep(1)
 
     # executa o jogo
     game.execute(sala_id, jogador, proxy)
@@ -44,7 +46,9 @@ if option == "1":
 # Entra em uma sala já existente caso a opção seja 2
 if option == "2":
     game.clean_screen()
-    sala_id = input("Digite o ID da sala: ")
+
+    print(proxy.listar_salas())
+    sala_id = input("\nDigite o ID da sala: ")
 
     # registra o jogador na sala
     jogador = proxy.registrar_jogador(sala_id)
@@ -52,17 +56,18 @@ if option == "2":
     # encerra o programa caso a sala não exista
     if jogador == "Sala não encontrada":
         print("Sala não encontrada, tente novamente")
-        time.sleep(2)
+        time.sleep(1)
         sys.exit()
 
     # encerra o programa caso a sala esteja cheia
     if jogador == "Sala cheia":
         print("Sala cheia, tente outra sala")
-        time.sleep(2)
+        time.sleep(1)
         sys.exit()
 
+    game.clean_screen()
     print(f"Você é o jogador {jogador}")
-    time.sleep(2)
+    time.sleep(1)
 
     # executa o jogo
     game.execute(sala_id, jogador, proxy)

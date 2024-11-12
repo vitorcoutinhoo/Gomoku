@@ -8,6 +8,9 @@ class Tabuleiro:
         self.tabuleiro = [["*" for _ in range(15)] for _ in range(15)]
         self.lastpos = (0, 0, None)
 
+        # teste para verificar se a função de verificar ganhador está funcionando
+        # self.tabuleiro[0][:4] = ["X", "X", "X", "X"] 
+
     # Função para movimentar a peça no tabuleiro
     def movimentar_peca(self, x, y, peca):
 
